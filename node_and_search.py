@@ -164,7 +164,6 @@ class SearchAlgorithm:
             successors = curr_node.item.successor()
             while not successors.empty():
                 succ = successors.get()
-                print(succ.state.state)
                 if succ.state.state not in visited_states:
                     self.search_cost += 1
                     visited_states.append(succ.state.state)
