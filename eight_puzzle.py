@@ -32,9 +32,10 @@ class EightPuzzle:
         distance = 0
         for i in range(3):
             for j in range(3):
-                if self.state[i][j] == self.goal[i][j]:
-                    distance += abs(self.state[i] - self.goal[i]) + \
-                        abs(self.state[j] - self.goal[j])
+                curr_node = self.state[i][j]
+                goal_node = self.get_position_goal(curr_node)
+                distance += abs(
+                    i - goal_node[0]) + abs(j - goal_node[1])
         return distance
 
 
@@ -67,10 +68,16 @@ class EightPuzzle:
         else:
             return False
 
-    def get_e_position(self):
+    def get_position_goal(self, value):
         for i in range(3):
             for j in range(3):
-                if self.state[i][j] == 'e':
+                if self.goal[i][j] == value:
+                    return (i, j)
+
+    def get_position(self, value):
+        for i in range(3):
+            for j in range(3):
+                if self.state[i][j] == value:
                     return (i, j)
 
     def move(self, move):
@@ -93,7 +100,7 @@ class EightPuzzle:
 
     def right(self):
 
-        e_position = self.get_e_position()
+        e_position = self.get_position('e')
         if self.state[e_position[0]][e_position[1]] != self.state[e_position[0]][2]:
             temp_value = self.state[e_position[0]][e_position[1]+1]
             self.state[e_position[0]][e_position[1]+1
@@ -103,7 +110,7 @@ class EightPuzzle:
 
     def down(self):
 
-        e_position = self.get_e_position()
+        e_position = self.get_position('e')
 
         if self.state[e_position[0]][e_position[1]] != self.state[2][e_position[1]]:
             temp_value = self.state[e_position[0]+1][e_position[1]]
@@ -114,7 +121,7 @@ class EightPuzzle:
 
     def left(self):
 
-        e_position = self.get_e_position()
+        e_position = self.get_position('e')
 
         if self.state[e_position[0]][e_position[1]] != self.state[e_position[0]][0]:
             temp_value = self.state[e_position[0]][e_position[1]-1]
@@ -125,7 +132,7 @@ class EightPuzzle:
 
     def up(self):
 
-        e_position = self.get_e_position()
+        e_position = self.get_position('e')
 
         if self.state[e_position[0]][e_position[1]] != self.state[0][e_position[1]]:
             temp_value = self.state[e_position[0]-1][e_position[1]]
