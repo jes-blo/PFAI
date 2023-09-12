@@ -5,9 +5,9 @@ from copy import deepcopy
 
 class EightPuzzle:
 
-    def __init__(self, initial_state):
+    def __init__(self, initial_state, goal_state):
         self.state = initial_state
-        self.goal = [['e', 1, 2], [3, 4, 5], [6, 7, 8]]
+        self.goal = goal_state
         self.action = ['right', 'down', 'left', 'up']
 
     def pretty_print(self):
@@ -70,10 +70,9 @@ class EightPuzzle:
     def right(self):
 
         e_position = self.get_e_position()
-
-        if self.state[e_position[0]][e_position[1]+1] != self.state[e_position[0]][2]:
+        if self.state[e_position[0]][e_position[1]] != self.state[e_position[0]][2]:
             temp_value = self.state[e_position[0]][e_position[1]+1]
-            self.state[e_position[0]][e_position[1+1]
+            self.state[e_position[0]][e_position[1]+1
                                       ] = self.state[e_position[0]][e_position[1]]
             self.state[e_position[0]][e_position[1]] = temp_value
             return True
@@ -82,7 +81,7 @@ class EightPuzzle:
 
         e_position = self.get_e_position()
 
-        if self.state[e_position[0]+1][e_position[1]] != self.state[2][e_position[1]]:
+        if self.state[e_position[0]][e_position[1]] != self.state[2][e_position[1]]:
             temp_value = self.state[e_position[0]+1][e_position[1]]
             self.state[e_position[0]+1][e_position[1]
                                         ] = self.state[e_position[0]][e_position[1]]
@@ -93,9 +92,9 @@ class EightPuzzle:
 
         e_position = self.get_e_position()
 
-        if self.state[e_position[0]][e_position[1]-1] != self.state[e_position[0]][0]:
+        if self.state[e_position[0]][e_position[1]] != self.state[e_position[0]][0]:
             temp_value = self.state[e_position[0]][e_position[1]-1]
-            self.state[e_position[0]][e_position[1-1]
+            self.state[e_position[0]][e_position[1]-1
                                       ] = self.state[e_position[0]][e_position[1]]
             self.state[e_position[0]][e_position[1]] = temp_value
             return True
@@ -104,7 +103,7 @@ class EightPuzzle:
 
         e_position = self.get_e_position()
 
-        if self.state[e_position[0]-1][e_position[1]] != self.state[0][e_position[1]]:
+        if self.state[e_position[0]][e_position[1]] != self.state[0][e_position[1]]:
             temp_value = self.state[e_position[0]-1][e_position[1]]
             self.state[e_position[0]-1][e_position[1]
                                         ] = self.state[e_position[0]][e_position[1]]

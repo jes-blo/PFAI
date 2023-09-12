@@ -43,15 +43,6 @@ class Node:
                 successors.put(childNode)
         return successors
 
-    def successor_lifo(self):
-        successors = []
-        for action in self.state.action:
-            child = self.state.move(action)
-            if child != None:
-                childNode = Node(child, self.cost + 1, self, action)
-                successors.append(childNode)
-        return successors
-
     def pretty_print_solution(self, verbose=False):
         if self.parent:
             self.parent.pretty_print_solution(verbose)
@@ -96,20 +87,20 @@ class SearchAlgorithm:
                     self.cpu_time = time.process_time() - start_time
                     self.statistics()
                 return curr_node
-            successor = curr_node.successor()
-            while not successor.empty():
-                succ = successor.get()
+            successors = curr_node.successor()
+            while not successors.empty():
+                succ = successors.get()
                 # if succ.state.state not in visited_states:
                 self.search_cost += 1
                 succ.visited = True
                 frontier.put(succ)
 
     def dfs(self, depth_limit=None, verbose=False, statistics=False):
+        self.search_cost = 0
         start_time = time.process_time()
         frontier = []
         frontier.append(self.start)
         visited_states = [self.start.state.state]
-        self.search_cost = 0
         self.search_cost += 1
         stop = False
         while not stop:
@@ -125,9 +116,9 @@ class SearchAlgorithm:
                     self.cpu_time = time.process_time() - start_time
                     self.statistics()
                 return curr_node
-            successor = curr_node.successor()
-            while not successor.empty():
-                succ = successor.get()
+            successors = curr_node.successor()
+            while not successors.empty():
+                succ = successors.get()
                 if (depth_limit == None or depth_limit >= curr_node.depth) and succ.state.state not in visited_states:
                     self.search_cost += 1
                     frontier.append(succ)
@@ -149,40 +140,36 @@ class SearchAlgorithm:
             depth_limit += 1
 
     def greedy_search(self, heuristic=0, verbose=False, statistics=False):
+        self.search_cost = 0
         start_time = time.process_time()
         frontier = queue.PriorityQueue()
-        frontier.put(self.start)
+        h = self.start.state.h_1() if heuristic == 0 else self.start.state.h_2()
+        frontier.put(PrioritizedItem(h, self.start))
         visited_states = [self.start.state.state]
-        self.search_cost = 0
         self.search_cost += 1
         stop = False
         while not stop:
             if frontier.empty():
-                print('stop')
                 return None
             curr_node = frontier.get()
-            if curr_node.goal_state():
+            if curr_node.item.goal_state():
                 stop = True
-                curr_node.pretty_print_solution(verbose)
+                curr_node.item.pretty_print_solution(verbose)
                 if statistics:
-                    self.goal_depth = curr_node.depth
-                    self.solution_cost = curr_node.depth  # fråga på handledning
+                    self.goal_depth = curr_node.item.depth
+                    self.solution_cost = curr_node.item.depth  # fråga på handledning
                     self.cpu_time = time.process_time() - start_time
                     self.statistics()
-                return curr_node
-            successor = curr_node.successor()
-            while not successor.empty():
-                succ = successor.get()
+                return curr_node.item
+            successors = curr_node.item.successor()
+            while not successors.empty():
+                succ = successors.get()
+                print(succ.state.state)
                 if succ.state.state not in visited_states:
-                    print('run')
                     self.search_cost += 1
                     visited_states.append(succ.state.state)
-                    if heuristic == 1:
-                        frontier.put(PrioritizedItem(
-                            successor.state.h_1(), succ))
-                    else:
-                        frontier.put(PrioritizedItem(
-                            successor.state.h_2(), succ))
+                    h = succ.state.h_1() if heuristic == 0 else succ.state.h_2()
+                    frontier.put(PrioritizedItem(h, succ))
 
     def statistics(self):
         branching = self.search_cost ** (1 / self.goal_depth)

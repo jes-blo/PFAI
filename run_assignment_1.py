@@ -12,6 +12,7 @@ init_state = [[0, 0], 'r', [3, 3]]
 goal_state = [[3, 3], 'l', [0, 0]]
 
 init_state_2 = [[7, 2, 4], [5, 'e', 6], [8, 3, 1]]
+goal_state_2 = [['e', 1, 2], [3, 4, 5], [6, 7, 8]]
 
 
 def main():
@@ -47,15 +48,13 @@ def main():
     goal_node.state.pretty_print()
     '''
 
-    ep = EightPuzzle(init_state_2)
+    ep = EightPuzzle(init_state_2, goal_state_2)
     sa_2 = SearchAlgorithm(ep)
 
     print('Greedy search')
     print('starting search')
     ep.pretty_print()
-    goal_node = sa_2.greedy_search(verbose=False, statistics=True)
-    print(goal_node)
-    sa_2.statistics()
+    goal_node = sa_2.greedy_search(heuristic=0, statistics=True)
 
     '''
     list = [[7, 2, 4], [5, 'e', 6], [8, 3, 1]]
