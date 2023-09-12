@@ -37,6 +37,30 @@ class EightPuzzle:
                         abs(self.state[j] - self.goal[j])
         return distance
 
+
+    def h_2_jb(self):  # manhattan distance
+        distance = 0
+        for i in range(3):
+            for j in range(3):
+                if self.state[i][j] == self.goal[i][j]:
+                    distance += abs(self.state[i] - self.goal[i]) + \
+                        abs(self.state[j] - self.goal[j])
+        return distance
+    
+    def h_2_jb(self):
+        distance=0
+        for val in range (9):
+            for i in range(3):
+                for j in range(3):
+                    if self.state[i][j] == val:
+                        state_pos = (i, j)
+                    if self.goal[i][j] == val:
+                        goal_pos = (i,j)
+                    i_dist= abs(state_pos[0]- goal_pos[0])
+                    j_dist = abs(state_pos[1]- goal_pos[1])
+                    distance += i_dist + j_dist
+        return distance
+
     def check_goal(self):
         if self.state == self.goal:
             return True
